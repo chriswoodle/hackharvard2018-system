@@ -7,7 +7,7 @@ const Koa = require('koa');
 const app = new Koa();
 const crypto = require('crypto');
 
-const port = process.env.PORT || 9000;
+const port = process.env.PORT || 8080;
 
 async function run() {
     console.log('connecting...')

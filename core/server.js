@@ -1,14 +1,19 @@
 require('dotenv').config()
+const log = require('debug')('core:server');
 
-'use strict';
+// console.log(process.env);
+const ipc = require('./src/ipc');
 
-const smartcar = require('smartcar');
 const express = require('express');
-
 const app = express();
+const port = process.env.PORT || 3000;
 
-const port = process.env.PORT || 8000;
+app.get('/', (req, res) => res.send('Hello World!'));
 
+
+// Smart Car OAuth
+const smartCarLog = require('debug')('core:smartcar');
+const smartcar = require('smartcar');
 const client = new smartcar.AuthClient({
     clientId: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
@@ -17,17 +22,10 @@ const client = new smartcar.AuthClient({
     testMode: false, // launch the Smartcar auth flow in test mode
 });
 
-console.log(process.env);
-
-app.get('/', (req, res) => {
-    res.send('Hello World!');
-});
-
 // Redirect to Smartcar's authentication flow
 app.get('/login', (req, res) => {
-
+    smartCarLog('redirecting to smartcar oauth...');
     const link = client.getAuthUrl({ state: 'MY_STATE_PARAM' });
-
     // redirect to the link
     res.redirect(link);
 });
@@ -47,10 +45,9 @@ app.get('/callback', (req, res, next) => {
             // in a production app you'll want to store this in some kind of persistent storage
             access = _access;
             // get the user's vehicles
-            console.log(access.accessToken);
+            smartCarLog(access.accessToken);
 
             return smartcar.getVehicleIds(access.accessToken);
-
         })
         .then(function (res) {
             // instantiate first vehicle in vehicle list
@@ -59,17 +56,17 @@ app.get('/callback', (req, res, next) => {
             return vehicle.info();
         })
         .then(function (data) {
-            console.log(data);
-            // {
-            //   "id": "bla-bla-bla",
-            //   "make": "TESLA",
-            //   "model": "Model S",
-            //   "year": 2014
-            // }
+            smartCarLog(data);
 
             // json response will be sent to the user
             res.json(data);
         });
 });
 
-app.listen(port, () => console.log(`Listening on port ${port}`));
+
+// Demo API
+
+
+
+
+app.listen(port, () => log(`Example app listening on port ${port}!`));
