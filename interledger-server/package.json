@@ -1,0 +1,23 @@
+{
+  "name": "interledger-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "azure-pack": "zip -r myAppFiles.zip ."
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^6.1.0",
+    "ilp-plugin": "^3.2.1",
+    "ilp-protocol-psk2": "^0.5.0",
+    "ilp-protocol-stream": "^1.8.4",
+    "koa": "^2.5.3"
+  },
+  "devDependencies": {
+    "chalk": "^2.4.1",
+    "localtunnel": "^1.9.1"
+  }
+}
