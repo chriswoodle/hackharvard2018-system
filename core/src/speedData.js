@@ -1,8 +1,8 @@
 const axios = require('axios');
+const log = require('debug')('core:map');
 
 // Returns speedCategory as described here: https://developer.here.com/documentation/geocoder/topics/resource-type-speed-category.html
 function getHERESpeedCode(lat, long) {
-
     return new Promise((resolve, reject) => {
         axios.get('https://reverse.geocoder.api.here.com/6.2/reversegeocode.json', {
             params: {
@@ -14,11 +14,11 @@ function getHERESpeedCode(lat, long) {
             }
         })
             .then(response => {
-                //console.log(response.data.Response.View[0].Result[0].Location.LinkInfo.SpeedCategory); //.LinkInfo.SpeedLimit
+                log(response.data.Response.View[0].Result[0].Location.LinkInfo.SpeedCategory); //.LinkInfo.SpeedLimit
                 resolve(response.data.Response.View[0].Result[0].Location.LinkInfo.SpeedCategory);
             })
             .catch(function (error) {
-                //console.log(error);
+                log(error);
                 reject(error);
             });
     });
@@ -27,9 +27,7 @@ function getHERESpeedCode(lat, long) {
 
 // Returns the current traffic flow speed
 function getAzureMapsCurrentSpeed(lat, long) {
-
     return new Promise((resolve, reject) => {
-
         axios.get('https://atlas.microsoft.com/traffic/flow/segment/json',
             {
                 params: {
@@ -42,11 +40,11 @@ function getAzureMapsCurrentSpeed(lat, long) {
                 }
             })
             .then(response => {
-                //console.log(response.data.flowSegmentData.currentSpeed);
+                log(response.data.flowSegmentData.currentSpeed);
                 resolve(response.data.flowSegmentData.currentSpeed);
             })
             .catch(error => {
-                //console.log(error.response.data);
+                log(error.response.data);
                 reject(error.response.data);
             });
     });
@@ -54,9 +52,7 @@ function getAzureMapsCurrentSpeed(lat, long) {
 
 // Returns the typical free speed of the given road via coordinates
 function getAzureMapsFreeSpeed(lat, long) {
-
     return new Promise((resolve, reject) => {
-
         axios.get('https://atlas.microsoft.com/traffic/flow/segment/json',
             {
                 params: {
@@ -69,11 +65,11 @@ function getAzureMapsFreeSpeed(lat, long) {
                 }
             })
             .then(response => {
-                //console.log(response.data.flowSegmentData.freeFlowSpeed);
+                log(response.data.flowSegmentData.freeFlowSpeed);
                 resolve(response.data.flowSegmentData.freeFlowSpeed);
             })
             .catch(error => {
-                //console.log(error.response.data);
+                log(error.response.data);
                 reject(error.response.data);
             });
 
@@ -81,7 +77,7 @@ function getAzureMapsFreeSpeed(lat, long) {
 }
 
 module.exports = {
-    getHERESpeedCode : getHERESpeedCode,
-    getAzureMapsCurrentSpeed : getAzureMapsCurrentSpeed,
-    getAzureMapsFreeSpeed : getAzureMapsFreeSpeed
+    getHERESpeedCode: getHERESpeedCode,
+    getAzureMapsCurrentSpeed: getAzureMapsCurrentSpeed,
+    getAzureMapsFreeSpeed: getAzureMapsFreeSpeed
 }
