@@ -17,8 +17,7 @@
     </div>
 
         <div class='uk-container'>
-        
-
+      
           <vk-grid gutter="small" matched class="uk-child-width-1-3@m">
              <div>
           <vk-card>

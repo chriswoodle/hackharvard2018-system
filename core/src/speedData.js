@@ -7,7 +7,7 @@ function getHERESpeedCode(lat, long) {
         axios.get('https://reverse.geocoder.api.here.com/6.2/reversegeocode.json', {
             params: {
                 app_id: process.env.HERE_APP_ID,
-                app_code: creds.HERE_APP_CODE,
+                app_code: process.env.HERE_APP_CODE,
                 mode: "retrieveAddresses",
                 locationattributes: "li",
                 prox: lat + ", " + long
@@ -15,11 +15,11 @@ function getHERESpeedCode(lat, long) {
         })
             .then(response => {
                 log(response.data.Response.View[0].Result[0].Location.LinkInfo.SpeedCategory); //.LinkInfo.SpeedLimit
-                resolve(response.data.Response.View[0].Result[0].Location.LinkInfo.SpeedCategory);
+                return resolve(response.data.Response.View[0].Result[0].Location.LinkInfo.SpeedCategory);
             })
             .catch(function (error) {
                 log(error);
-                reject(error);
+                return reject(error);
             });
     });
 
@@ -41,11 +41,11 @@ function getAzureMapsCurrentSpeed(lat, long) {
             })
             .then(response => {
                 log(response.data.flowSegmentData.currentSpeed);
-                resolve(response.data.flowSegmentData.currentSpeed);
+                return resolve(response.data.flowSegmentData.currentSpeed);
             })
             .catch(error => {
                 log(error.response.data);
-                reject(error.response.data);
+                return reject(error.response.data);
             });
     });
 }
@@ -66,13 +66,12 @@ function getAzureMapsFreeSpeed(lat, long) {
             })
             .then(response => {
                 log(response.data.flowSegmentData.freeFlowSpeed);
-                resolve(response.data.flowSegmentData.freeFlowSpeed);
+                return resolve(response.data.flowSegmentData.freeFlowSpeed);
             })
             .catch(error => {
                 log(error.response.data);
-                reject(error.response.data);
+                return reject(error.response.data);
             });
-
     });
 }
 

@@ -4,6 +4,9 @@ const log = require('debug')('core:digest');
 
 const { client } = require('./ipc');
 
+const ilp = require('ilp')
+
+
 const { db } = require('./database');
 
 let interval;
@@ -18,14 +21,28 @@ function digest() {
             client.set('vehicle_rate', 1);
         }
 
-        client.get('vehicle_balance', (err, balance) => {
-            balance = parseInt(balance);
-            client.get('units_per_digest', (err, units_per_digest) => {
-                units_per_digest = parseInt(units_per_digest);
-                console.log(balance, units_per_digest, vehicle_rate)
-                client.set('vehicle_balance', balance + Math.floor(units_per_digest * vehicle_rate));
-            });
+        // client.get('vehicle_balance', (err, balance) => {
+        //     balance = parseInt(balance);
+        //     client.get('units_per_digest', (err, units_per_digest) => {
+        //         units_per_digest = parseInt(units_per_digest);
+        //         console.log(balance, units_per_digest, vehicle_rate)
+        //         client.set('vehicle_balance', balance + Math.floor(units_per_digest * vehicle_rate));
+        //     });
+        // });
+
+        client.get('units_per_digest', (err, units_per_digest) => {
+            units_per_digest = parseInt(units_per_digest);
+            console.log(units_per_digest, vehicle_rate)
+            ilp.SPSP.pay(ilp.createPlugin(), {
+                receiver: process.env.RECIEVER,
+                sourceAmount: Math.floor(units_per_digest * vehicle_rate)
+            }).then(response => {
+                // console.log(response.sent);
+            }).catch(err=>{
+                log(err)
+            })
         });
+
     });
 }
 

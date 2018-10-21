@@ -1,4 +1,4 @@
-const speed = 50;
+const speed = 20;
 
 require('dotenv').config()
 

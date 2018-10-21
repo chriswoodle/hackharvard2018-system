@@ -23,8 +23,8 @@ const PSK2 = require('ilp-protocol-psk2');
 
 const log = require('debug')('bank:server');
 
-const express = require('express');
-const app = express();
+const Koa = require('koa');
+const app = new Koa();
 
 const { client } = require('./src/ipc');
 

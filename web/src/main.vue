@@ -3,17 +3,17 @@
         <vk-navbar>
 
   <vk-navbar-nav>
-    <vk-navbar-nav-item title="Insura-ledger" active></vk-navbar-nav-item>
+    <vk-navbar-nav-item title="Insura-ledger" active href='/'></vk-navbar-nav-item>
   </vk-navbar-nav>
 
   <vk-navbar-nav slot="center">
-    <vk-navbar-nav-item icon="nut">
+    <vk-navbar-nav-item icon="nut" href='/dashboard'>
 </vk-navbar-nav-item>
   </vk-navbar-nav>
 
   <vk-navbar-nav slot="right">
+    <vk-navbar-nav-item title="Providers" href='/providers'></vk-navbar-nav-item>
     <vk-navbar-nav-item title="Utilities" href='/util'></vk-navbar-nav-item>
-    <!-- <vk-navbar-nav-item title="Item"></vk-navbar-nav-item> -->
   </vk-navbar-nav>
 
         </vk-navbar>

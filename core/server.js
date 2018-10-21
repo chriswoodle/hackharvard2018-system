@@ -9,7 +9,9 @@ const digest = require('./src/digest');
 const express = require('express');
 const app = express();
 
-require('./src/database');
+const { db } = require('./src/database');
+
+const map = require('./src/speedData');
 
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
@@ -97,6 +99,59 @@ app.post('/startDigest', (req, res) => {
 app.post('/stopDigest', (req, res) => {
     digest.stopDigest();
     res.send('stopped');
+});
+
+app.get('/computeVehiclePremium', (req, res) => {
+    client.get('vehicle_rate', (err, rate) => {
+        if (err) return log(err);
+        // console.log(rate);
+        client.get('vehicle_location', (err, location) => {
+            if (err) return log(err);
+            const lat = parseFloat(location.split(',')[0]);
+            const long = parseFloat(location.split(',')[1]);
+            client.get('vehicle_speed', (err, speed) => {
+                if (err) return log(err);
+                speed = parseFloat(speed);
+
+                console.log(lat, long, speed)
+                Promise.all([
+                    map.getAzureMapsCurrentSpeed(lat, long),
+                    map.getAzureMapsFreeSpeed(lat, long),
+                    map.getHERESpeedCode(lat, long)
+                ]).then((responses) => {
+                    console.log(responses)
+                    const currentSpeed = responses[0];
+                    const freeSpeed = responses[1]; // Speed with no traffic (usually speed limit + little more)
+                    const speedCode = responses[2];
+                    let speedScore = .95;
+                    if (speed > freeSpeed + 5)
+                        speedScore = speedScore + (speed - (freeSpeed + 5)) / 20;
+
+                    if (speed > currentSpeed + 5)
+                        speedScore = speedScore + (speed - (currentSpeed + 5)) / 20;
+
+                    if (speed < freeSpeed - 5)
+                        speedScore = speedScore + ((freeSpeed - 5) - speed) / 20;
+
+                    if (speed < currentSpeed - 5)
+                        speedScore = speedScore + ((currentSpeed - 5) - speed) / 20;
+
+                    client.set('vehicle_rate', speedScore);
+
+                    res.json({
+                        vehicle_speed: speed,
+                        currentSpeed,
+                        freeSpeed,
+                        speedCode,
+                        speedScore
+                    });
+                }).catch(err => {
+                    console.log(err)
+                })
+            });
+        });
+    });
+
 });
 
 const ioLog = require('debug')('core:socket.io');
