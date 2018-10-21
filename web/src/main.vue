@@ -22,13 +22,9 @@
 
 <script lang="ts">
 import { router } from "./index";
+import Vue from 'vue';
 
-import { Vue, Component } from "vue-property-decorator";
-
-@Component
-export default class Main extends Vue {
-  protected methods = {};
-}
+export default Vue.extend({});
 </script>
 
 <style lang="scss" scoped>
