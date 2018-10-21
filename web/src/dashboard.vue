@@ -16,7 +16,7 @@
 </vk-card>
     </div>
 
-        <div class='uk-container'>
+        <div class='uk-container small-section'>
       
           <vk-grid gutter="small" matched class="uk-child-width-1-3@m">
              <div>
@@ -29,7 +29,7 @@
 
           </vk-card>
           </div>
-            <div>
+            <div >
           <vk-card>
             <vk-card-title>Insurance Score</vk-card-title>
             <p>Lower is better</p>
@@ -38,18 +38,24 @@
           </div>
 
           </vk-grid>
-          <div>
-            <br />
-            <center><h3>Premium Score</h3></center>
-            <br />
-            <vue-c3 :handler="handler1"></vue-c3>
-            <br />
-            <center><h3>Speed of Vehicle</h3></center>
-            <br />
-            <vue-c3 :handler="handler2"></vue-c3>
-            <br />
-          </div>
+          
         </div>
+        <div class='uk-container small-section' >
+            <vk-card>
+            <center><h3>Premium Score</h3></center>
+            <vue-c3 :handler="handler1"></vue-c3>
+            </vk-card>
+          </div>
+
+          <div class='uk-container small-section' >
+
+            <vk-card>
+
+            <center><h3>Speed of Vehicle</h3></center>
+            <vue-c3 :handler="handler2"></vue-c3>
+            </vk-card>
+
+          </div>
     </div>
 </template>
 
@@ -57,6 +63,7 @@
 // @ts-ignore
 import io from "socket.io-client";
 
+// @ts-ignore
 import VueC3 from "vue-c3";
 
 const socket = io("http://localhost:3000");
