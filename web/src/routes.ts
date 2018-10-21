@@ -3,6 +3,8 @@ import VueRouter from 'vue-router';
 
 import PageNotFound from './page-not-found.vue';
 import Dashboard from './dashboard.vue';
+import Providers from './providers.vue';
+import Splash from './splash.vue';
 import Util from './util.vue';
 
 import Main from './main.vue';
@@ -16,10 +18,11 @@ export const Routes: RouteConfig[] = [
         children: [
             {
                 path: '/',
-                beforeEnter: (to, from, next) => next({ name: 'dashboard', replace: true })
+                component: Splash,
+                name: 'splash'
             },
             {
-                path: '/',
+                path: '/dashboard',
                 component: Dashboard,
                 name: 'dashboard'
             }, 
@@ -27,6 +30,11 @@ export const Routes: RouteConfig[] = [
                 path: '/util',
                 component: Util,
                 name: 'util'
+            },
+            {
+                path: '/providers',
+                component: Providers,
+                name: 'providers'
             },
         ],
     },
