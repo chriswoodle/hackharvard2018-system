@@ -10,10 +10,13 @@ import VueRx from 'vue-rx';
 Vue.use(VueRouter);
 Vue.use(VueRx);
 
+import './styles.scss';
+
 // @ts-ignore
 import Vuikit from 'vuikit';
 // @ts-ignore
 import VuikitIcons from '@vuikit/icons';
+// import '@vuikit/theme';
 
 Vue.use(Vuikit);
 Vue.use(VuikitIcons);
