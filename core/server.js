@@ -6,6 +6,10 @@ const ipc = require('./src/ipc');
 
 const express = require('express');
 const app = express();
+
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+
 const port = process.env.PORT || 3000;
 
 app.get('/', (req, res) => res.send('Hello World!'));
@@ -63,10 +67,12 @@ app.get('/callback', (req, res, next) => {
         });
 });
 
-
 // Demo API
 
+const ioLog = require('debug')('core:socket.io');
 
+io.on('connection', function (socket) {
+    ioLog('a user connected');
+});
 
-
-app.listen(port, () => log(`Example app listening on port ${port}!`));
+http.listen(port, () => log(`App listening on port ${port}!`));

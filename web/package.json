@@ -29,13 +29,13 @@
     "eventemitter3": "^3.1.0",
     "express": "^4.16.4",
     "rxjs": "^6.3.2",
+    "socket.io-client": "^2.1.1",
+    "socket.io-json-parser": "^2.1.0",
     "uikit": "^3.0.0-rc.19",
     "vue": "^2.5.17",
     "vue-moment": "^4.0.0",
-    "vue-property-decorator": "^7.2.0",
     "vue-router": "^3.0.1",
     "vue-rx": "^6.0.1",
-    "vue-rx-decorators": "0.0.8",
     "vuikit": "^0.8.10"
   }
 }
