@@ -5,14 +5,17 @@
              <div>
           <vk-card>
             <vk-card-title>Balance</vk-card-title>
-            <vk-label>{{balance}} XRP</vk-label>
+            <vk-label>{{Math.round((balance / 100000) * 100) / 100 }} XRP</vk-label>
+            <vk-label type="success">{{
+              Math.round(((balance / 100000) * .461836) * 100) / 100}} USD</vk-label>
+
           </vk-card>
           </div>
              <div>
 
           <vk-card>
-            <vk-card-title>Rate</vk-card-title>
-            <vk-label>{{rate}} XRP/Time</vk-label>
+            <vk-card-title>Score</vk-card-title>
+            <vk-label>{{Math.round(rate * 100)}} %</vk-label>
           </vk-card>
           </div>
 
@@ -48,11 +51,15 @@ export default Vue.extend({
       const body = message.split(":")[1];
       switch (type) {
         case "vehicle_rate":
-          console.log("Vehicle rate is", body);
+          // console.log("Vehicle rate is", body);
           this.rate = body;
           break;
         case "vehicle_speed":
-          console.log("Vehicle speed is", body);
+          // console.log("Vehicle speed is", body);
+          break;
+        case "vehicle_balance":
+          this.balance = body;
+          console.log((this.balance / 100000) * 0.461836);
           break;
       }
     });

@@ -1,4 +1,20 @@
 require('dotenv').config()
+
+const average_yearly_vehicle_insurance = 800; // usd
+const xrp_exchange_rate = .461836; // usd per XRP
+const unit_exchange_rate = 100000; // units per xrp
+const minutes_per_year = 525600;
+
+const units_per_minute = Math.floor((average_yearly_vehicle_insurance / minutes_per_year) * (1 / xrp_exchange_rate) * unit_exchange_rate);
+console.log('units_per_minute', units_per_minute);
+
+//  dollars   xrp       units
+//  ------- x ------- x ----
+//  minute    dollars   xrp
+
+const units_per_digest = Math.floor((units_per_minute / 60) * (process.env.DIGEST_INTERVAL / 1000));
+console.log('units_per_digest', units_per_digest);
+
 const crypto = require('crypto');
 
 const makePlugin = require('ilp-plugin');
@@ -11,6 +27,12 @@ const express = require('express');
 const app = express();
 
 const { client } = require('./src/ipc');
+
+setTimeout(() => {
+    client.set('units_per_minute', units_per_minute);
+    client.set('units_per_digest', units_per_digest);
+}, 1000)
+
 
 const port = process.env.PORT || 8080;
 
@@ -33,13 +55,15 @@ async function run() {
             stream.setReceiveMax(10000000000000)
             stream.on('money', amount => {
                 log('got packet for', amount, 'units');
+
+
                 client.get('vehicle_balance', (err, balance) => {
                     if (err) return log(err);
                     if (balance == null) {
                         client.set('vehicle_balance', 0);
                     }
                     if (balance != null) {
-                        client.set('vehicle_rate', balance + amount);
+                        client.set('vehicle_balance', balance + amount);
                     }
                 });
             });

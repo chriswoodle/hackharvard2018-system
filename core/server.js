@@ -116,9 +116,15 @@ io.on('connection', function (socket) {
             if (socket.connected)
                 socket.send(`vehicle_speed:${rate}`);
         });
+        client.get('vehicle_balance', (err, balance) => {
+            if (err) return log(err);
+            // console.log(rate);
+            if (socket.connected)
+                socket.send(`vehicle_balance:${balance}`);
+        });
     }, 1000);
 
-    socket.on('disconnected', () => {
+    socket.on('disconnect', () => {
         ioLog('disconnected');
         clearInterval(interval)
     });
