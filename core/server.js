@@ -4,8 +4,12 @@ const log = require('debug')('core:server');
 // console.log(process.env);
 const ipc = require('./src/ipc');
 
+const digest = require('./src/digest');
+
 const express = require('express');
 const app = express();
+
+require('./src/database');
 
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
@@ -68,6 +72,22 @@ app.get('/callback', (req, res, next) => {
 });
 
 // Demo API
+
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+  });
+
+app.post('/startDigest', (req, res) => {
+    digest.startDigest();
+    res.send('Started');
+});
+
+app.post('/stopDigest', (req, res) => {
+    digest.stopDigest();
+    res.send('stopped');
+});
 
 const ioLog = require('debug')('core:socket.io');
 

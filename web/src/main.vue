@@ -7,7 +7,7 @@
   </vk-navbar-nav>
 
   <vk-navbar-nav slot="right">
-    <vk-navbar-nav-item title="Active" active></vk-navbar-nav-item>
+    <vk-navbar-nav-item title="Utilities" href='/util'></vk-navbar-nav-item>
     <vk-navbar-nav-item title="Item"></vk-navbar-nav-item>
   </vk-navbar-nav>
 

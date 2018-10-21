@@ -1,5 +1,7 @@
 import Vue from 'vue';
 
+// Libraries
+
 // @ts-ignore
 import moment from 'vue-moment';
 Vue.use(moment);
@@ -20,6 +22,13 @@ import VuikitIcons from '@vuikit/icons';
 
 Vue.use(Vuikit);
 Vue.use(VuikitIcons);
+
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+ 
+Vue.use(VueAxios, axios)
+
+// App
 
 import { Routes } from './routes';
 

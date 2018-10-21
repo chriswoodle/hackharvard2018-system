@@ -3,6 +3,8 @@ import VueRouter from 'vue-router';
 
 import PageNotFound from './page-not-found.vue';
 import Dashboard from './dashboard.vue';
+import Util from './util.vue';
+
 import Main from './main.vue';
 
 
@@ -20,6 +22,11 @@ export const Routes: RouteConfig[] = [
                 path: '/',
                 component: Dashboard,
                 name: 'dashboard'
+            }, 
+            {
+                path: '/util',
+                component: Util,
+                name: 'util'
             },
         ],
     },
