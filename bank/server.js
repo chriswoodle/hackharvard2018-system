@@ -31,6 +31,8 @@ const { client } = require('./src/ipc');
 setTimeout(() => {
     client.set('units_per_minute', units_per_minute);
     client.set('units_per_digest', units_per_digest);
+    // client.set('vehicle_balance', 0);
+
 }, 1000)
 
 
@@ -55,15 +57,18 @@ async function run() {
             stream.setReceiveMax(10000000000000)
             stream.on('money', amount => {
                 log('got packet for', amount, 'units');
-
+                amount = parseInt(amount);
 
                 client.get('vehicle_balance', (err, balance) => {
                     if (err) return log(err);
+                    balance = parseInt(balance);
+                    const newBalance = balance + amount;
+                    console.log(newBalance, balance, amount)
                     if (balance == null) {
                         client.set('vehicle_balance', 0);
                     }
                     if (balance != null) {
-                        client.set('vehicle_balance', balance + amount);
+                        client.set('vehicle_balance', newBalance);
                     }
                 });
             });
@@ -117,3 +122,7 @@ run()
         console.error(e);
         process.exit(1);
     });
+
+module.exports = {
+    port
+}
