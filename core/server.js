@@ -2,7 +2,7 @@ require('dotenv').config()
 const log = require('debug')('core:server');
 
 // console.log(process.env);
-const ipc = require('./src/ipc');
+const { client } = require('./src/ipc');
 
 const digest = require('./src/digest');
 
@@ -22,7 +22,7 @@ app.get('/', (req, res) => res.send('Hello World!'));
 // Smart Car OAuth
 const smartCarLog = require('debug')('core:smartcar');
 const smartcar = require('smartcar');
-const client = new smartcar.AuthClient({
+const smartcarclient = new smartcar.AuthClient({
     clientId: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
     redirectUri: process.env.REDIRECT_URL,
@@ -33,7 +33,7 @@ const client = new smartcar.AuthClient({
 // Redirect to Smartcar's authentication flow
 app.get('/login', (req, res) => {
     smartCarLog('redirecting to smartcar oauth...');
-    const link = client.getAuthUrl({ state: 'MY_STATE_PARAM' });
+    const link = smartcarclient.getAuthUrl({ state: 'MY_STATE_PARAM' });
     // redirect to the link
     res.redirect(link);
 });
@@ -48,7 +48,7 @@ app.get('/callback', (req, res, next) => {
     }
 
     // exchange auth code for access token
-    return client.exchangeCode(req.query.code)
+    return smartcarclient.exchangeCode(req.query.code)
         .then(function (_access) {
             // in a production app you'll want to store this in some kind of persistent storage
             access = _access;
@@ -73,11 +73,11 @@ app.get('/callback', (req, res, next) => {
 
 // Demo API
 
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
-  });
+});
 
 app.post('/startDigest', (req, res) => {
     digest.startDigest();
@@ -92,7 +92,20 @@ app.post('/stopDigest', (req, res) => {
 const ioLog = require('debug')('core:socket.io');
 
 io.on('connection', function (socket) {
-    ioLog('a user connected');
+    ioLog('connected');
+    const interval = setInterval(() => {
+        client.get('vehicle_rate', (err, rate) => {
+            if (err) return log(err);
+            // console.log(rate);
+            if (socket.connected)
+                socket.send(`vehicle_rate:${rate}`);
+        });
+    }, 1000);
+
+    socket.on('disconnected', () => {
+        ioLog('disconnected');
+        clearInterval(interval)
+    });
 });
 
 http.listen(port, () => log(`App listening on port ${port}!`));
