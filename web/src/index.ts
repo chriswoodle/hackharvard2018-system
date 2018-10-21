@@ -21,8 +21,9 @@ import VuikitIcons from '@vuikit/icons';
 Vue.use(Vuikit);
 Vue.use(VuikitIcons);
 
-
 import { Routes } from './routes';
+
+import './data';
 
 console.log(window.location.host);
 

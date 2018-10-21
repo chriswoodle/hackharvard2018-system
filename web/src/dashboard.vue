@@ -8,12 +8,10 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
 
-@Component
-export default class Dashboard extends Vue {
-  protected methods = {};
-}
+import Vue from 'vue';
+
+export default Vue.extend({});
 </script>
 
 <style lang="scss" scoped>
