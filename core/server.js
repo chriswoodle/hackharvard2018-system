@@ -79,6 +79,16 @@ app.use(function (req, res, next) {
     next();
 });
 
+app.get('/balance', (req, res) => {
+    client.get('vehicle_balance', (err, balance) => {
+        if (err) return log(err);
+        if (balance == null) {
+            client.set('vehicle_balance', 0);
+        }
+        res.json({ balance: parseInt(balance) });
+    });
+});
+
 app.post('/startDigest', (req, res) => {
     digest.startDigest();
     res.send('Started');
@@ -99,6 +109,12 @@ io.on('connection', function (socket) {
             // console.log(rate);
             if (socket.connected)
                 socket.send(`vehicle_rate:${rate}`);
+        });
+        client.get('vehicle_speed', (err, rate) => {
+            if (err) return log(err);
+            // console.log(rate);
+            if (socket.connected)
+                socket.send(`vehicle_speed:${rate}`);
         });
     }, 1000);
 

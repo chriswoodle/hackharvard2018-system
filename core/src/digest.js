@@ -1,3 +1,5 @@
+
+const base_insurance_rate = 2; // XRP per DIGEST_INTERVAL
 const log = require('debug')('core:digest');
 
 const { client } = require('./ipc');

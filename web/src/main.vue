@@ -12,7 +12,7 @@
   </vk-navbar-nav>
 
         </vk-navbar>
-        <div class='uk-section uk-section-default'>
+        <div class='uk-section '>
             <router-view :key="$route.fullPath">
             </router-view>
         </div>
